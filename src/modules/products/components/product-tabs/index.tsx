@@ -5,7 +5,8 @@ import { PricedProduct } from "@medusajs/medusa/dist/types/pricing"
 import Back from "@modules/common/icons/back"
 import FastDelivery from "@modules/common/icons/fast-delivery"
 import Refresh from "@modules/common/icons/refresh"
-
+import { Text } from "@medusajs/ui"
+import { Heading } from "@medusajs/ui"
 import Accordion from "./accordion"
 
 type ProductTabsProps = {
@@ -25,7 +26,25 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   ]
 
   return (
-    <div className="w-full">
+    <div className="w-full md:px-16 lg:px-16 py-5">
+
+      <Heading
+        style={{
+          fontFamily: "'Jacques Francois'",
+          fontWeight: "400",
+        }}
+        level="h2"
+        className="text-3xl leading-10 text-ui-fg-base pb-4"
+      >
+        Item Description
+      </Heading>
+      <Text
+        className="whitespace-break-spaces text-medium text-ui-fg-subtle pb-4"
+        data-testid="product-description"
+      >
+        {product.description}
+      </Text>
+
       <Accordion type="multiple">
         {tabs.map((tab, i) => (
           <Accordion.Item

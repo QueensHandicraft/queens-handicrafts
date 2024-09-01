@@ -1,4 +1,6 @@
-import { useRouter } from "next/navigation"
+import { useRouter ,useSearchParams} from "next/navigation"
+
+
 import {
   ChangeEvent,
   FormEvent,
@@ -8,6 +10,7 @@ import {
   useState,
 } from "react"
 import { UseSearchBoxProps, useSearchBox } from "react-instantsearch-hooks-web"
+
 
 export type ControlledSearchBoxProps = React.ComponentProps<"div"> & {
   inputRef: RefObject<HTMLInputElement>
@@ -39,6 +42,16 @@ const SearchBoxWrapper = ({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const router = useRouter()
+  const searchParams = useSearchParams();
+
+  useEffect(()=>{
+    if(searchParams.has("query")){
+      setValue(searchParams.get("query") as string)
+      window.history.replaceState(null, '', '/search')
+    }
+  },[])
+  
+
 
   const onReset = () => {
     setValue("")

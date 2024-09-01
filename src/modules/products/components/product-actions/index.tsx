@@ -12,8 +12,10 @@ import { addToCart } from "@modules/cart/actions"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/option-select"
 
+import { useRouter } from "next/navigation"
 import MobileActions from "../mobile-actions"
 import ProductPrice from "../product-price"
+import toast, { Toaster } from "react-hot-toast"
 
 type ProductActionsProps = {
   product: PricedProduct
@@ -33,8 +35,22 @@ export default function ProductActions({
   region,
   disabled,
 }: ProductActionsProps) {
+  const router = useRouter()
   const [options, setOptions] = useState<Record<string, string>>({})
   const [isAdding, setIsAdding] = useState(false)
+
+  const [selectedQuantity, setSelectedQuantity] = useState(1)
+
+  // Function to handle changes in the dropdown
+  const handleChange = (e) => {
+    setSelectedQuantity(parseInt(e.target.value))
+  }
+
+  // Generate options dynamically
+  const quantityOptions = Array.from({ length: 10 }, (_, index) => ({
+    label: index + 1,
+    value: index + 1,
+  }))
 
   const countryCode = useParams().countryCode as string
 
@@ -121,23 +137,46 @@ export default function ProductActions({
   const inView = useIntersection(actionsRef, "0px")
 
   // add the selected variant to the cart
-  const handleAddToCart = async () => {
-    if (!variant?.id) return null
+  const handleAddToCart = async (bN=false) => {
+    if (!variant?.id) return
 
     setIsAdding(true)
 
     await addToCart({
       variantId: variant.id,
-      quantity: 1,
+      quantity: selectedQuantity, // Use the state variable here
       countryCode,
     })
-
     setIsAdding(false)
+    if(bN){
+      router.push('/cart')
+    }else{
+      toast.success("Item(s) added to cart")
+    }
   }
+
 
   return (
     <>
-      <div className="flex flex-col gap-y-2" ref={actionsRef}>
+      <div
+        className="flex flex-col gap-y-2 lg:max-w-[500px] mx-auto"
+        ref={actionsRef}
+      >
+        <Toaster
+          containerStyle={{
+            position: "absolute",
+            bottom: "0", // Changed from top: '0' to bottom: '0'
+            right: "0",
+          }}
+          toastOptions={{
+            className: "",
+            style: {
+              border: "1px solid #000000",
+              color: "#000000",
+            },
+          }}
+        />
+
         <div>
           {product.variants.length > 1 && (
             <div className="flex flex-col gap-y-4">
@@ -160,13 +199,26 @@ export default function ProductActions({
           )}
         </div>
 
+        <div className="flex items-center justify-left mb-4">
+          <label htmlFor="quantity" className="text-sm font-medium mr-3">
+            Quantity:
+          </label>
+          <select onChange={handleChange}>
+            {quantityOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <ProductPrice product={product} variant={variant} region={region} />
 
         <Button
-          onClick={handleAddToCart}
+          onClick={()=>handleAddToCart(true)}
           disabled={!inStock || !variant || !!disabled || isAdding}
           variant="primary"
-          className="w-full h-10"
+          className="w-full h-10 mt-4"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
@@ -174,8 +226,24 @@ export default function ProductActions({
             ? "Select variant"
             : !inStock
             ? "Out of stock"
-            : "Add to cart"}
+            : "Buy It Now"}
         </Button>
+
+        <Button
+          onClick={()=>handleAddToCart(false)}
+          disabled={!inStock || !variant || !!disabled || isAdding}
+          variant="secondary"
+          className="w-full h-10 mt-3"
+          isLoading={isAdding}
+          data-testid="add-product-button"
+        >
+          {!variant
+            ? "Select variant"
+            : !inStock
+            ? "Out of stock"
+            : "Add to Cart"}
+        </Button>
+        
         <MobileActions
           product={product}
           variant={variant}

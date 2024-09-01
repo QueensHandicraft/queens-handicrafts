@@ -1,36 +1,24 @@
-import { Github } from "@medusajs/icons"
-import { Button, Heading } from "@medusajs/ui"
+import { Github } from "@medusajs/icons";
+import { Button, Heading } from "@medusajs/ui";
+import Image from "next/image";
+import logo from "/public/queens.jpg";
+import LocalizedClientLink from "@modules/common/components/localized-client-link";
 
 const Hero = () => {
   return (
-    <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
-        <span>
-          <Heading
-            level="h1"
-            className="text-3xl leading-10 text-ui-fg-base font-normal"
-          >
-            Ecommerce Starter Template
-          </Heading>
-          <Heading
-            level="h2"
-            className="text-3xl leading-10 text-ui-fg-subtle font-normal"
-          >
-            Powered by Medusa and Next.js
-          </Heading>
-        </span>
-        <a
-          href="https://github.com/medusajs/nextjs-starter-medusa"
-          target="_blank"
-        >
-          <Button variant="secondary">
-            View on GitHub
-            <Github />
-          </Button>
-        </a>
-      </div>
-    </div>
-  )
-}
+    <div className="w-full relative flex px-2 sm:px-4 md:px-6 lg:px-8 xl:px-16 justify-center items-center">
+  <div className="text-center py-5">
+    <Image
+      className="rounded-2xl"
+      src={logo}
+      height={380}
+      alt="Queens Handicrafts"// Ensure you specify both width and height for better control over aspect ratio
+      objectFit="fill"
+    />
+  </div>
+</div>
 
-export default Hero
+  );
+};
+
+export default Hero;

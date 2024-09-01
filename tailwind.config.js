@@ -34,6 +34,8 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        customColor: "#0D0D0D",
+        customBackgroundColor:"#A6671B"
       },
       borderRadius: {
         none: "0px",
@@ -67,8 +69,10 @@ module.exports = {
           "Roboto",
           "Helvetica Neue",
           "Ubuntu",
-          "sans-serif",
+          "sans-serif"
         ],
+        category: ['"Jacques Francois"'],
+        footer: ['"Jacques Francois"'],
       },
       keyframes: {
         ring: {

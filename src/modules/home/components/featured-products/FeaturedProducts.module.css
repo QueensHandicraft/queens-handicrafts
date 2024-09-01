@@ -1,0 +1,21 @@
+.featuredProductsList {
+  list-style-type: none;
+}
+
+.collectionItem {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: 'Jacques Francois', Arial, sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-family: 'Jacques Francois', Arial, sans-serif;
+  font-size: 20px;
+  color: #888;
+  margin-bottom: 1rem;
+}

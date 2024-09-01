@@ -18,9 +18,10 @@ type CountryOption = {
 type CountrySelectProps = {
   toggleState: StateType
   regions: Region[]
+  isNav: Boolean
 }
 
-const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
+const CountrySelect = ({ toggleState, regions, isNav }: CountrySelectProps) => {
   const [current, setCurrent] = useState<CountryOption | undefined>(undefined)
 
   const { countryCode } = useParams()
@@ -66,56 +67,58 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
       >
         <Listbox.Button className="py-1 w-full">
           <div className="txt-compact-small flex items-start gap-x-2">
-            <span>Shipping to:</span>
+
+            {!isNav && <span>Shipping to:</span>}
             {current && (
               <span className="txt-compact-small flex items-center gap-x-2">
                 <ReactCountryFlag
                   svg
                   style={{
-                    width: "16px",
-                    height: "16px",
+                    width: "25px",
+                    height: "25px",
                   }}
                   countryCode={current.country}
                 />
-                {current.label}
+             
               </span>
             )}
           </div>
         </Listbox.Button>
         <div className="flex relative w-full min-w-[320px]">
-          <Transition
-            show={state}
-            as={Fragment}
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+  <Transition
+    show={state}
+    as={Fragment}
+    leave="transition ease-in duration-150"
+    leaveFrom="opacity-100"
+    leaveTo="opacity-0"
+  >
+    <Listbox.Options
+      className="absolute left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
+      static
+    >
+      {options?.map((o, index) => {
+        return (
+          <Listbox.Option
+            key={index}
+            value={o}
+            className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
           >
-            <Listbox.Options
-              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
-              static
-            >
-              {options?.map((o, index) => {
-                return (
-                  <Listbox.Option
-                    key={index}
-                    value={o}
-                    className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
-                  >
-                    <ReactCountryFlag
-                      svg
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                      }}
-                      countryCode={o.country}
-                    />{" "}
-                    {o.label}
-                  </Listbox.Option>
-                )
-              })}
-            </Listbox.Options>
-          </Transition>
-        </div>
+            <ReactCountryFlag
+              svg
+              style={{
+                width: "16px",
+                height: "16px",
+              }}
+              countryCode={o.country}
+            />{" "}
+            {o.label}
+          </Listbox.Option>
+        )
+      })}
+    </Listbox.Options>
+  </Transition>
+</div>
+
       </Listbox>
     </div>
   )

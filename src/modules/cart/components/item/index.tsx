@@ -11,7 +11,7 @@ import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { updateLineItem } from "@modules/cart/actions"
 import Spinner from "@modules/common/icons/spinner"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
@@ -26,6 +26,7 @@ const Item = ({ item, region, type = "full" }: ItemProps) => {
   const [error, setError] = useState<string | null>(null)
 
   const { handle } = item.variant.product
+
 
   const changeQuantity = async (quantity: number) => {
     setError(null)

@@ -2,67 +2,74 @@ import { Suspense } from "react"
 
 import { listRegions } from "@lib/data"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import CartButton from "@modules/layout/components/cart-button"
-import SideMenu from "@modules/layout/components/side-menu"
+import SearchBar from "./searchBar.jsx"
+import Country from "./Country.jsx"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions) => regions)
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} />
-            </div>
-          </div>
-
-          <div className="flex items-center h-full">
+    <div className="top-0 inset-x-0 z-50 group">
+      <header className="relative mx-auto duration-200 bg-white">
+        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex flex-col md:flex-row items-center justify-end w-full h-8 text-small-regular">
+          <div className="flex flex-col md:flex-row items-center gap-y-6 md:gap-x-6 justify-end">
             <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
+              className="hover:text-ui-fg-base font-bold text-base mb-4 md:mb-0"
+              href="/account"
+              data-testid="nav-account-link"
             >
-              Medusa Store
+              Account
             </LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              {process.env.FEATURE_SEARCH_ENABLED && (
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base"
-                  href="/search"
-                  scroll={false}
-                  data-testid="nav-search-link"
-                >
-                  Search
-                </LocalizedClientLink>
-              )}
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
-              </LocalizedClientLink>
-            </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
+            <LocalizedClientLink
+              className="hover:text-ui-fg-base font-bold text-base mb-4 md:mb-0"
+              href="/cart"
+              data-testid="nav-cart-link"
             >
-              <CartButton />
-            </Suspense>
+              Cart
+            </LocalizedClientLink>
+            <LocalizedClientLink
+              className="hover:text-ui-fg-base font-bold text-base mb-4 md:mb-0"
+              href="/help"
+              data-testid="nav-help-link"
+            >
+              Help
+            </LocalizedClientLink>
+            {regions && <Country props={regions} />}
           </div>
         </nav>
+
+        {/* Include the client-side search bar */}
+        <hr className="border-t-1 border-gray-300 w-full" style={{ borderWidth: '1px' }} />
+
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchBar />
+        </Suspense>
+
+        <hr className="border-t-1 border-gray-300 w-full" style={{ borderWidth: '1px' }} />
+
+        <nav 
+        className="content-container flex flex-wrap justify-center items-center text-ui-fg-subtle"
+        >
+          <LocalizedClientLink
+            href="/collections/armour"
+            className="font-category px-4 font-inter font-medium line-h-8 text-left hover:text-ui-fg-base md:mb-0"
+          >
+            Armours
+          </LocalizedClientLink>
+          <LocalizedClientLink
+            href="/collections/clothing"
+            className="font-category px-4 font-inter font-medium line-h-8 text-left hover:text-ui-fg-base md:mb-0"
+          >
+            Clothing
+          </LocalizedClientLink>
+          <LocalizedClientLink
+            href="/collections/weaponry"
+            className="font-category px-4 font-inter font-medium line-h-8 text-left hover:text-ui-fg-base md:mb-0"
+          >
+            Weaponry
+          </LocalizedClientLink>
+        </nav>
+        <hr className="border-t-1 border-gray-300 w-full" style={{ borderWidth: '1px' }} />
       </header>
     </div>
   )
