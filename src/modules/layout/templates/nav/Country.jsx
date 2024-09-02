@@ -1,5 +1,5 @@
 'use client'
-import CountrySelect from "../../../layout/components/country-select"
+import CountrySelect from "../../components/country-select"
 import { Text, clx, useToggleState } from "@medusajs/ui"
 
 import { ArrowRightMini, XMark } from "@medusajs/icons"
